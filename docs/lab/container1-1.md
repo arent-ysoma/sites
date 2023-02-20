@@ -97,7 +97,7 @@ docker tag nginx-test:latest <アカウントID>.dkr.ecr.ap-northeast-1.amazonaw
 docker images
 ---
 REPOSITORY                                                     TAG       IMAGE ID       CREATED         SIZE
-634650387945.dkr.ecr.ap-northeast-1.amazonaws.com/nginx-test   latest    49aabfdeddca   9 minutes ago   142MB
+<アカウントID>.dkr.ecr.ap-northeast-1.amazonaws.com/nginx-test   latest    49aabfdeddca   9 minutes ago   142MB
 nginx-test                                                     latest    49aabfdeddca   9 minutes ago   142MB
 nginx                                                          latest    3f8a00f137a0   11 days ago     142MB
 ```
@@ -111,3 +111,82 @@ a0fde0a42b2b: Pushed
 - [nginx-test]リポジトリ画面にてイメージタグ"latest”がプッシュされていることを確認する
 
 ---
+
+## AppRunner設定
+### サービス作成
+- 「App Runner」を開き、左ペインよりサービスを選択
+- 「サービス」画面から[サービスの作成]ボタンをクリック
+- 「ソース及びデプロイ」画面で以下の通り項目を設定し、[次へ]ボタンをクリックする
+  - ソース
+    - リソースタイプ
+      - ”コンテナレジストリ”を選択
+    - プロバイダー
+      - ”Amazon ECR”を選択
+    - コンテナイメージのURI
+      - 前項で作成したECRリポジトリを選択
+      - イメージタグは"latest"を選択
+  - デプロイ設定 > デプロイトリガー
+    - ”自動”を選択
+  - デプロイ設定 > ECRアクセスロール
+    - ”新しいサービスロールの作成”を選択
+    - サービス名はデフォルト(AppRunnerECRAccessRole)のままか、なにかわかりやすい名前にする
+- 「サービスを設定」画面で以下の通り項目を設定し、[次へ]ボタンをクリックする
+  - サービス設定
+    - サービス名：適当に、"nginx-test"とか
+    - 仮想CPUとメモリ：一番ミニマムに
+      - 1vCPU、2GB
+    - ポート：80
+      - コンテが動くポートが80番なのでそれに合わせる
+  - ほか設定はそのまま
+- 「確認および作成」画面で一通り内容を確認し、[作成とデプロイ]ボタンをクリックする
+  - うまく行けば5分ぐらいでデプロイされる
+- ステータスが"Running"になったらデフォルトドメインにアクセスすると"nginx test"と表示される
+
+### イメージ更新
+新しいコンテナイメージがECRリポジトリにプッシュされたらデプロイされるかのテストを行う
+- 現状のイメージ状況確認
+```
+$ docker images
+REPOSITORY                                                     TAG       IMAGE ID       CREATED             SIZE
+<アカウントID>.dkr.ecr.ap-northeast-1.amazonaws.com/nginx-test   latest    49aabfdeddca   About an hour ago   142MB
+nginx-test                                                     latest    49aabfdeddca   About an hour ago   142MB
+nginx                                                          latest    3f8a00f137a0   11 days ago         142MB
+```
+- ビルドしたフォルダー内にあるindex.htmlファイルの中身を変更する
+```
+sed -i s/test/test222/g index.html
+```
+- 再度イメージをビルドする
+```
+docker build -t nginx-test ./
+```
+- イメージ状況の確認
+   - "nginx-test"イメージのIMAGE ID が変わっていることを確認
+```
+$ docker images
+REPOSITORY                                                     TAG       IMAGE ID       CREATED             SIZE
+nginx-test                                                     latest    1194d2a718d1   10 seconds ago      142MB
+<アカウントID>.dkr.ecr.ap-northeast-1.amazonaws.com/nginx-test   latest    49aabfdeddca   About an hour ago   142MB
+nginx                                                          latest    3f8a00f137a0   11 days ago         142MB
+```
+- イメージタグを付与
+```
+docker tag nginx-test:latest <アカウントID>.dkr.ecr.ap-northeast-1.amazonaws.com/nginx-test:latest
+```
+- イメージ状況の確認
+   - nginx-testのIMAGE IDと"アカウントID.dkr~"のIDが一緒になっている
+   - 既存の"アカウントID.dkr~"のTAGが"<none>"に変わっている
+```
+$ docker images
+REPOSITORY                                                     TAG       IMAGE ID       CREATED             SIZE
+<アカウントID>.dkr.ecr.ap-northeast-1.amazonaws.com/nginx-test   latest    1194d2a718d1   4 minutes ago       142MB
+nginx-test                                                     latest    1194d2a718d1   4 minutes ago       142MB
+<アカウントID>.dkr.ecr.ap-northeast-1.amazonaws.com/nginx-test   <none>    49aabfdeddca   About an hour ago   142MB
+nginx                                                          latest    3f8a00f137a0   11 days ago         142MB
+```
+- イメージプッシュ
+```
+docker push <アカウントID>.dkr.ecr.ap-northeast-1.amazonaws.com/nginx-test:latest
+```
+- pushしたら[nginx-test]サービスのステータスが”Operation in progress”となり、デプロイが実行される
+[nginx-test]サービスのステータスが”Running”になったら、ドメインにアクセスして、”nginx test222”と表示されることを確認する
