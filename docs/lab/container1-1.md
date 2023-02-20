@@ -190,3 +190,8 @@ docker push <アカウントID>.dkr.ecr.ap-northeast-1.amazonaws.com/nginx-test:
 ```
 - pushしたら[nginx-test]サービスのステータスが”Operation in progress”となり、デプロイが実行される
 [nginx-test]サービスのステータスが”Running”になったら、ドメインにアクセスして、”nginx test222”と表示されることを確認する
+
+# 片付け
+- 起動しているだけで料金が発生するので検証が終わったらサービスや、リポジトリを削除する
+- AppRunnerはまたすぐ使うのであれば一時停止ができるのでそれを利用する、ただし少額であるが料金は発生してしまう
+- サービスを削除するだけだだと[AppRunnerECRAccessRole]ロールは削除されないので注意、また使うのであれば残しておいても問題ないかと
