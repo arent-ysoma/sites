@@ -1,0 +1,24 @@
+version: 0.2
+env:
+  variables:
+    version: "v0.05"
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Build and Run the Docker image
+      - docker build -f nginx/Dockerfile -t $IMAGE_REPO_NAME1:$version nginx/
+      - echo docker tag $IMAGE_REPO_NAME1:$version $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME1:$version
+      - docker tag $IMAGE_REPO_NAME1:$version $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME1:$version
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME1:$version
+      - printf '[{"name":"<container-definition>","imageUri":"%s"}]' $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME1:$version > artifacts.json
+artifacts:
+  files: artifacts.json
