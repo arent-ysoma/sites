@@ -1,5 +1,5 @@
 # AWSのアカウント管理について
-- 今までは[IAMロール](https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/introduction.html)にて権限委譲(AssumeRole)で権限を管理していた
+- 今aまでは[IAMロール](https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/introduction.html)にて権限委譲(AssumeRole)で権限を管理していた
 - これからは[AWS IAM Identity Center](https://docs.aws.amazon.com/ja_jp/singlesignon/latest/userguide/what-is.html)で管理していくのがトレンドとなるかもしれない
 - ”IAM Ddentity Center”に付いての説明や使い方をまとめる
 
@@ -36,13 +36,11 @@
 ## [IAM Role(ロール)]とは
 - AWSのリソース(ec2,やrds,s3等)にポリシーを付与するもの
 - EC2からS3にアクセスしたり、SSMからEC2にアクセスできるポリシーを付与することができる
-- ロールはIAMユーザに委任することもできる（この後出てくる""）
-- 
-
-- 
+- ロールはIAMユーザに委任することもできる（この後出てくる"AsumeRoleにつながる"）
 
 ---
 # [AsumeRole]とは
+- 
 
 # 「IAM Ddentity Center」とは？
 - AWS Single Sign-On の後継である
