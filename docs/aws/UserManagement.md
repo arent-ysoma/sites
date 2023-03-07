@@ -1,7 +1,12 @@
 # AWSのアカウント管理について
-- 今aまでは[IAMロール](https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/introduction.html)にて権限委譲(AssumeRole)で権限を管理していた
+- AWS環境の作成時にどのようにアカウント管理をしていくかを考える
+- [ベストプラクティス](https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/best-practices.html)ではルートユーザを日常的なタスクには使用しないと書いてあるが、どう実現するかを考える
+- ほか、どのようにID管理をしていくかを考える
+
+（以下）
+- 今までは[IAMロール](https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/introduction.html)にて権限委譲(AssumeRole)で権限を管理していた
 - これからは[AWS IAM Identity Center](https://docs.aws.amazon.com/ja_jp/singlesignon/latest/userguide/what-is.html)で管理していくのがトレンドとなるかもしれない
-- ”IAM Ddentity Center”に付いての説明や使い方をまとめる
+- ”IAM Ddentity Center”についての説明や使い方をまとめる
 
 ---
 
@@ -40,11 +45,10 @@
 
 ---
 # [AsumeRole]とは
-- 
+- 他のIAMロールを引き受けるアクション
+- AWSコンソールでの操作としては”ロールの切り替え”、AWS CLIの場合は"aws sts assume-role"でロールの引受ができる
 
+---
 # 「IAM Ddentity Center」とは？
 - AWS Single Sign-On の後継である
-### [AsumeRole]とは
-- [PassRole] : 
----
-# 使い方
+
