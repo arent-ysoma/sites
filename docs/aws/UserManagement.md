@@ -31,6 +31,33 @@
 - ユーザアカウントを一元管理でき、AWSアカウント毎に権限設定ができる
 - [ドキュメント](https://docs.aws.amazon.com/ja_jp/singlesignon/latest/userguide/what-is.html)
 
+
+---
+## AWS Organizationsのセットアップ
+- 特に難しい設定ではないので[公式ドキュメントを参照](https://docs.aws.amazon.com/ja_jp/organizations/latest/userguide/orgs_manage_org_create.html)
+- よく発生する作業ではないのでマネジメントコンソールで作業したほうが良さそう
+
+## AWS IAM Identity Centerのセットアップ
+### 有効化
+- 特に難しい設定ではないので[公式ドキュメントを参照](https://docs.aws.amazon.com/ja_jp/singlesignon/latest/userguide/get-started-enable-identity-center.html)
+- 予めOrganizationsをセットアップしておく
+- 作業アカウントのリージョンが”東京”になっていることを確認する
+- 有効化すると設定されるまで多少時間がかかる
+### 許可セットとアカウント（必要であればグループ）の作成
+- AWSアカウントに権限付与するために、許可セット(権限)とユーザ(もしくはグループ)の設定がひつようになるため作成する
+- 許可セットの作成 ([参考](https://docs.aws.amazon.com/ja_jp/singlesignon/latest/userguide/get-started-create-an-administrative-permission-set.html))
+   - ”AdministratorAccess”をまずは作成、必要に応じて適切な権限の許可セットを作成する
+- グループの作成
+   - 許可セットとグループ及びユーザがセットとなるので必要に応じてグループを作成する
+- ユーザーの作成
+   - まずは管理者ユーザを作成する
+   - ユーザ名は変更できないため、社用で使う場合はわかりやすい名前にしておく
+   - 個人検証等の場合は、IDはユーザ名に紐づいているため、メールアドレスは個人の場合アカウント作成したときのメールアドレスでも問題ない
+### AWSアカウントにユーザまたはグループを割り当てる
+- この作業を行うことでAWSアカウントと作成した許可セット、ユーザが紐づけされる
+- 手順は[このページ](https://docs.aws.amazon.com/ja_jp/singlesignon/latest/userguide/get-started-assign-account-access-admin-user.html)を参照
+
+
 ---
 # 参考リンク
 - AWS アカウント管理
