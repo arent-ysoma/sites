@@ -1,55 +1,65 @@
-# AWSのアカウント管理について
+# AWSアカウントや利用するためのユーザ管理について
 - AWS環境の作成時にどのようにアカウント管理をしていくかを考える
 - [ベストプラクティス](https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/best-practices.html)ではルートユーザを日常的なタスクには使用しないと書いてあるが、どう実現するかを考える
 - ほか、どのようにID管理をしていくかを考える
 
 ---
+# まずは
 ## ルートユーザを使わない理由
 - [ここ](https://docs.aws.amazon.com/ja_jp/accounts/latest/reference/root-user.html)に記載されているとおり、ユーザ認証情報を持っていれば、アカウントすべてのリソースにアクセスできてしまう
-- 誰（どの人やリソース）がどんな操作をしたのかが追えなくなる
-- アカウントリソースは共用できるので必要に応じてアカウントや権限の払い出しを行っていく
+- 複数人でrootアカウントを利用した場合、誰（どの人やリソース）がどんな操作をしたのかが追えなくなる
+- 最悪の場合rootアカウント情報が漏れた場合、悪用されるおそれがある
 
-## アカウントを作成したら、まず行うこと
+## AWSアカウントを作成したら、まず行うこと
 - ルートユーザのMFA有効化
-   - ユーザID、とパスワードだけの認証だとセキュリティが引くためMFAは必ず設定しておくこと！
-- AWS Organizationsのセットアップ
-   - 新規アカウントや請求コストの一元管理ができるようになる
-   - たとえば検証利用であっても、新規アカウントであれば安心して環境を利用することができる
-- AWS IAM Identity Centerのセットアップ
-   - 環境ごとにアカウント払い出しが不要となり、認証や権限管理も１元化できる
-   - 今まではAssumeRoleが主流であったが、こちらのほうが権限管理が楽である
-- ユーザアカウント払い出し
+   - ベストプラクティスに記載の通り
+
+## その後どうするのか？
+- 前項で記載した通り、ベストプラクティスに沿うのであれば操作を行うためのユーザの作成を行う。
+- 通常の場合はIAMにて作業用ユーザを作成し、権限を付与する。
+
+## 例えばこんな時
+- 自己利用の場合、自分が利用するIAMユーザIDを作成すれば良い、ただし別に環境が必要になった時はAWSアカウントを別に取得する必要がある。   
+  (この場合、決済情報の登録、rootユーザのMFA有効化、ユーザID作成の作業が必要となる)
+- 会社で利用する場合、上記同様単一の環境であればIAMユーザIDを作成し利用することも可能だが、その場合は１つのAWSアカウント内でリソースを利用することになり、   
+  最悪の場合動いている環境が誤操作等で破壊されてしまうこともある。
+
+## どうすれば良いのか？
+- [AWS Organization](https://docs.aws.amazon.com/ja_jp/organizations/latest/userguide/orgs_introduction.html)を利用
+   - 検証利用や会社での個人学習環境の払い出し行うことができるようになり、まっさらなAWS環境を利用することができる
+   - コスト管理が一元化でき、場合によってはボリュームディスカウントできる
+   - AWSとしても用途ごとのマルチアカウント運用を推奨している
+     - ※元情報が無いので後で探す
+   - ※AWSアカウントを払い出す場合は、アカウント毎に個別のメールアドレスが必要となるので注意 
+- [AWS IAM Identity Center(旧 AWS SSO)](https://docs.aws.amazon.com/ja_jp/singlesignon/latest/userguide/what-is.html)を利用
+   - ユーザアカウントを一元管理できる
+   - AWS Organizationと一緒に利用することにより、AWSアカウント毎の権限管理をまとめられる
+   - 外部認証や外部ID管理を利用することができる(Active DirectoryやOkuta等)
+
+**=> 個人利用であっても会社利用であっても上記の組み合わせでユーザ管理をしていくほうがメリットが多々ある**
 
 ---
 ## 初期権限状況とAsuumeRole、AWS IAM Identity Center＋SSOのイメージ
+設定内容のイメージがつきやすいようにどのように権限が付与されているかをまとめてみた
+
 ### AWSアカウント作成時のアカウント状況
 - 作成されたアカウントIDに対して[root]ユーザのみが操作ができる
 
-![IAM_IC-AWSアカウト作成時](https://user-images.githubusercontent.com/125415634/224245848-b9a60c9c-728d-4ce9-ae72-63396b92270a.png)
+<img src="https://user-images.githubusercontent.com/125415634/224245848-b9a60c9c-728d-4ce9-ae72-63396b92270a.png" width="30%">
 
 ### AssumeRoleを利用した一時的な権限払い出し（よくあるやつ）
 - 基本rootアカウントを使用せず、必要な権限を記載したポリシーをユーザIDに付与する、もしくはAsumeRoleを利用して、一時的な権限付与で対応
 
-![IAM_IC-AsumeRole](https://user-images.githubusercontent.com/125415634/224864218-e3266069-3313-47d1-ab8d-84059ec4f23f.png)
+<img src="https://user-images.githubusercontent.com/125415634/224864218-e3266069-3313-47d1-ab8d-84059ec4f23f.png" width="30%">
 
-### AWS Organizations + AWS IAM Identity Center
+### AWS Organizations + AWS IAM Identity Center (個人開発や自社開発で利用する場合)
 - AWS Organizationsを利用することが前提だが、IAM Identity Centerを利用すことにより各AWSアカウントのIAMでユーザやロール管理することなく、IAM ICで管理できるようになる
 - また検証や、環境を分けるためのAWSアカウント払い出し時に決済情報不要でAWSアカウントの払い出しができるようになる
 
-![IAM_IC-OU and IAM_IC](https://user-images.githubusercontent.com/125415634/224866316-89267522-9d65-4552-9b7a-89bd3ef2f288.png)
-
-## 「AWS Organizations」とは？
-- AWSアカウントを一元管理できる
-- 一元管理することにより、すべてのアカウントの請求が一括となる
-- [ドキュメント](https://docs.aws.amazon.com/ja_jp/organizations/latest/userguide/orgs_introduction.html)
-
-## 「IAM Ddentity Center」とは？
-- AWS Single Sign-On の後継である
-- ユーザアカウントを一元管理でき、AWSアカウント毎に権限設定ができる
-- [ドキュメント](https://docs.aws.amazon.com/ja_jp/singlesignon/latest/userguide/what-is.html)
-
+<img src="https://user-images.githubusercontent.com/125415634/224866316-89267522-9d65-4552-9b7a-89bd3ef2f288.png" width="40%">
 
 ---
+# AWS OrganizationsとAWS IAM Identity Centerを使ってみよう！
 ## AWS Organizationsのセットアップ
 - 特に難しい設定ではないので[公式ドキュメントを参照](https://docs.aws.amazon.com/ja_jp/organizations/latest/userguide/orgs_manage_org_create.html)
 - よく発生する作業ではないのでマネジメントコンソールで作業したほうが良さそう
@@ -77,10 +87,14 @@
 
 ---
 # 参考リンク
+- IAMでのセキュリティのベストプラクティス
+  - https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/best-practices.html#enable-mfa-for-privileged-users
 - AWS アカウント管理
   - https://docs.aws.amazon.com/ja_jp/accounts/latest/reference/accounts-welcome.html
 - AWS Identity and Access Management
   - https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/introduction.html
+- 一時クレデンシャルを利用する
+  - https://tech.nri-net.com/entry/sts-temp-credential
 
 
 
