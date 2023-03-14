@@ -95,6 +95,5 @@
   - https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/introduction.html
 - 一時クレデンシャルを利用する
   - https://tech.nri-net.com/entry/sts-temp-credential
-
-
-
+- AWS Organizations & IAM Identity Center利用をオススメしてみる(AWS Organizations活用のリアル補足)
+  - https://product.st.inc/entry/2022/12/23/102300
