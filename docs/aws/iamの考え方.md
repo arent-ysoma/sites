@@ -1,6 +1,13 @@
 # 公式ドキュメント
 https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/introduction.html
 
+# その前にAWSアカウントについて
+- 各AWSリソースを区別するための情報である
+- AWSアカウントはリソースを分けるためにある
+- またリソースごとの課金を分けるためにも有用である
+- 参考URL
+   https://docs.aws.amazon.com/ja_jp/accounts/latest/reference/accounts-welcome.html
+
 # IAMの要素
 - IAMは”ID”と呼ばれる個別の番号（もしくはリソース名）と”アクセス管理”で構成されている。
 - ID
@@ -38,3 +45,10 @@ https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/introduction.html
 # [AsumeRole]とは
 - 他のIAMロールを引き受けるアクション
 - AWSコンソールでの操作としては”ロールの切り替え”、AWS CLIの場合は"aws sts assume-role"でロールの引受ができる
+
+---
+# 参考
+- AWS IAM の概念をざっくり理解する
+  - https://blog.serverworks.co.jp/re-getting-started-iam
+- IAMRoleにおけるsts:AssumeRoleとiam:PassRoleの違いをハッキリさせる
+  - https://blog.ricein.com/aws/315/difference_between_assumerole_and_passrole
