@@ -21,16 +21,22 @@
 - ユーザアカウント払い出し
 
 ---
-## 権限的はなし
+## 初期権限状況とAsuumeRole、AWS IAM Identity Center＋SSOのイメージ
 ### AWSアカウント作成時のアカウント状況
 - 作成されたアカウントIDに対して[root]ユーザのみが操作ができる
 
 ![IAM_IC-AWSアカウト作成時](https://user-images.githubusercontent.com/125415634/224245848-b9a60c9c-728d-4ce9-ae72-63396b92270a.png)
 
-### 今までの作業アカウントの払い出し
-- 基本rootアカウントを使用せず、必要な権限を記載したポリシーをIDに付与するか、AsumeRoleを利用して、一時的な権限付与で対応していた
+### AssumeRoleを利用した一時的な権限払い出し（よくあるやつ）
+- 基本rootアカウントを使用せず、必要な権限を記載したポリシーをユーザIDに付与する、もしくはAsumeRoleを利用して、一時的な権限付与で対応
 
-![IAM_IC-今までの作業アカウント形式](https://user-images.githubusercontent.com/125415634/224246336-03c2fac5-74e3-42ca-986b-7ba9eb6c2046.png)
+![IAM_IC-AsumeRole](https://user-images.githubusercontent.com/125415634/224864218-e3266069-3313-47d1-ab8d-84059ec4f23f.png)
+
+### AWS Organizations + AWS IAM Identity Center
+- AWS Organizationsを利用することが前提だが、IAM Identity Centerを利用すことにより各AWSアカウントのIAMでユーザやロール管理することなく、IAM ICで管理できるようになる
+- また検証や、環境を分けるためのAWSアカウント払い出し時に決済情報不要でAWSアカウントの払い出しができるようになる
+
+![IAM_IC-OU and IAM_IC](https://user-images.githubusercontent.com/125415634/224866316-89267522-9d65-4552-9b7a-89bd3ef2f288.png)
 
 ## 「AWS Organizations」とは？
 - AWSアカウントを一元管理できる
