@@ -1,5 +1,5 @@
 # lab2-2 ECSクラスタ作成とBlue/Greenデプロイ
-[lab2-1](container2-1.md)でコンテナイメージの準備までできた。   
+[lab2-1](container2-1.md)でコンテナイメージの準備まで行った。    
 次にECSクラスタを作成し、作成したイメージをクラスタにデプロイするところまでやってみる。
 
 ---
@@ -94,38 +94,16 @@ aws ecs create-cluster --cluster-name nginx-cluster
 
 ### タスク定義作成
 - [task.json]ファイルを作成
+  - [こののファイル](https://github.com/YoichiSoma/sites/blob/main/docs/lab/lab2/2-2/task.json)の内容をコピーしてcloud9に貼り付ける
   - 作成はcloud9かcloud shellが望ましい
   - [sed]コマンドを利用して、変数代入を行うため
-- 内容は以下 (※ 後でGitHUｂにアップロードする)
-```
-{
-    "family": "nginx-fargate", 
-    "networkMode": "awsvpc", 
-    "requiresCompatibilities": [ "FARGATE" ], 
-    "cpu": "256", 
-    "memory": "512",
-    "executionRoleArn": "arn:aws:iam::account-id:role/ecsTaskExecutionRole",
-    "containerDefinitions": [
-        {
-            "name": "nginx-fargate", 
-            "image": "account-id.dkr.ecr.ap-northeast-1.amazonaws.com/container-test:latest", 
-            "portMappings": [
-                {
-                    "containerPort": 80, 
-                    "hostPort": 80, 
-                    "protocol": "tcp"
-                }
-            ]
-        }
-    ]
-}
-```
 - ファイルのアカウントIDを利用しているIDに変換
 ```
 ACCID=`aws sts get-caller-identity --query "Account" --output text`
-sed -e "s/account-id/${ACCID}/g" ~/environment/php-sample/task.json.org
+sed -i "s/account-id/${ACCID}/g" ~/environment/container-test/task.json
 ```
 - タスク登録
 ```
-aws ecs register-task-definition --cli-input-json file://~/environment/php-sample/task.json
+aws ecs register-task-definition --cli-input-json file://~/environment/container-test/task.json
 ```
+
