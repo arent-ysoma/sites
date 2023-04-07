@@ -7,7 +7,7 @@
             "Action": [
                 "ecr:ListImages"
             ],
-            "Resource": "arn:aws:ecr:ap-northeast-1:<アカウントID>:repository/container-test"
+            "Resource": "arn:aws:ecr:ap-northeast-1:account-id:repository/container-test"
         },
         {
             "Sid": "GetAuthorizationToken",
@@ -33,7 +33,7 @@
                 "ecr:CompleteLayerUpload",
                 "ecr:PutImage"
             ],
-            "Resource": "arn:aws:ecr:ap-northeast-1:<アカウントID>:repository/container-test"
+            "Resource": "arn:aws:ecr:ap-northeast-1:account-id:repository/container-test"
         }
     ]
 }
