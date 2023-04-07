@@ -1,0 +1,26 @@
+{
+    "launchType": "FARGATE",
+    "taskDefinition": "nginx-fargate",
+    "platformVersion": "LATEST",
+    "cluster": "nginx-cluster",
+    "serviceName": "nginx-fargate",
+    "schedulingStrategy": "REPLICA",
+    "deploymentController": {
+        "type": "CODE_DEPLOY"
+    },
+    "networkConfiguration": {
+        "awsvpcConfiguration": {
+           "assignPublicIp": "ENABLED",
+           "securityGroups": [ "SGID" ],
+           "subnets": [ "SUBNETID1", "SUBNETID2" ]
+        }
+     },
+    "loadBalancers": [
+        {
+            "targetGroupArn": "TGID",
+            "containerName": "nginx-fargate",
+            "containerPort": 80
+        }
+    ],
+    "desiredCount": 1
+}
