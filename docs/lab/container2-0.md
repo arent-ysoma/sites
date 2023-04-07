@@ -18,6 +18,7 @@
  ## 前提条件
  - lab1-1の環境(Cloud9)を利用するので環境を作成してない場合は作成しておくこと
  - **Git操作があるのでgitの概念や、操作系(add,commit,push等)のコマンド操作は予め学習しておくこと**
+    - [本当に簡単な操作](https://github.com/YoichiSoma/sites/blob/main/docs/tools/git%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E6%93%8D%E4%BD%9C.md)
  
  ---
  ## 想定構成
