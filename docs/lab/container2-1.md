@@ -30,15 +30,15 @@ git push origin master
 ## ファイルの準備
 - 先程作成した空ファイルをcloud9で開いて以下のリンクの内容そのままコピーする
    - [buildspec.yml](https://github.com/YoichiSoma/sites/blob/main/docs/lab/lab2/buildspec.yml)
+     - 内容が違うので後で修正する
    - [Dockerfile](https://github.com/YoichiSoma/sites/blob/main/docs/lab/lab2/Dockerfile)
    - [index.html](https://github.com/YoichiSoma/sites/blob/main/docs/lab/lab2/index.html)
 - フォルダ構成と各ファイルの内容は以下である
 ```
 (work Dir)
 ├── buildspec.yml : CodeBuild が docker build して コンテナイメージを作成し ECR のリポジトリに push する際に使用する仕様書
-└── nginx
-    ├── Dockerfile : ビルドするときに参照されるファイル
-    └── index.html ：lab1同様index.htmlの差し替えファイル
+├── Dockerfile : ビルドするときに参照されるファイル
+└── index.html ：lab1同様index.htmlの差し替えファイル
 ```
 - ファイルを更新したら再度リポジトリへプッシュすることを忘れずに！
 
