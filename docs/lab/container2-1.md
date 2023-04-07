@@ -30,7 +30,6 @@ git push origin master
 ## ファイルの準備
 - 先程作成した空ファイルをcloud9で開いて以下のリンクの内容そのままコピーする
    - [buildspec.yml](https://github.com/YoichiSoma/sites/blob/main/docs/lab/lab2/buildspec.yml)
-     - 内容が違うので後で修正する
    - [Dockerfile](https://github.com/YoichiSoma/sites/blob/main/docs/lab/lab2/Dockerfile)
    - [index.html](https://github.com/YoichiSoma/sites/blob/main/docs/lab/lab2/index.html)
 - フォルダ構成と各ファイルの内容は以下である
@@ -69,13 +68,6 @@ git push origin master
       - 特権付与 : "Docker イメージを構築するか、ビルドで~"にチェック
       - サービスロール: 新しいサービスロール
       - ロール名 : codebuild-container-test-service-role (プロジェクト名のものが反映されているはずなのでそのまま利用)
-      - ※ ここいらない ※ 追加設定 > 環境変数
-         - 以下の変数を作成
-         - |名前|値|タイプ|
-           |---|---|---|
-           |AWS_ACCOUNT_ID|<利用しているアカウントのID>|プレーンテキスト|
-           |AWS_DEFAULT_REGION|ap-northeast-1|プレーンテキスト|
-           |IMAGE_REPO_NAME1|container-test|プレーンテキスト|
    - Buildspec
       - ビルド仕様 : buildspec ファイルを使用する
    - 以下項目はそのまま（アーティファクト、ログ）
@@ -85,9 +77,17 @@ git push origin master
    - ポリシー名： access_ECR_container-test （わかりやすい名前でOK）
    - 内容 ： [このファイル](https://github.com/YoichiSoma/sites/blob/main/docs/lab/lab2/access_ECR_container-test)の内容をコピーして、アカウントIDを利用しているものに変更する.
      - もしリポジトリ名を違うもので作成した場合はリポジトリ名も変更する
+   - ※ cloud9（コマンドライン）で修正する場合は以下で変更できる
+     ```
+     ACCID=`aws sts get-caller-identity --query "Account" --output text`
+     sed -e "s/account-id/${ACCID}/g" ~/environment/container-test/access_ECR_container-test
+     ```
 - [codebuild-nginx-test-service-role]ロールに作成したポリシーの割当を行う
 
 ## ビルドテスト
 - 作成したビルドプロジェクトを開き、[ビルドを開始]ボタンをクリックする
 - 問題がなければ３分ほどで処理が終わりステータスが"成功"となる
 - 失敗している場合はログ内容を確認し、どこで問題が起きたか調査する
+
+## イメージが作成されているか確認
+- [container-test]ECRリポジトリにイメージが作成されていることを確認する
