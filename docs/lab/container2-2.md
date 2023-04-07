@@ -46,4 +46,86 @@ aws elbv2 create-target-group --name ECSBGB --protocol HTTP --port 80 --target-t
 aws elbv2 describe-target-groups
 ```
 
+### ALB作成
+- 事前変数作成
+  - 利用するサブネットID、SG、の指定が必要なので変数化しておく
+  - subnetIDは[Name]タグでフィルターしているので環境に応じてvaluesの値を変更する
+    - 自分の環境では"base-aza"と"base-azc"を作成してある
+  - ALB作成時に最低２つのサブネットが必要である
+```
+SGID=`aws ec2 describe-security-groups --filters Name=group-name,Values=SG-ALB | jq -r ' .SecurityGroups[].GroupId'`
+SUBNETID1=`aws ec2 describe-subnets --filters "Name=tag:Name,Values=base-aza" | jq -r '.Subnets[].SubnetId'`
+SUBNETID2=`aws ec2 describe-subnets --filters "Name=tag:Name,Values=base-azc" | jq -r '.Subnets[].SubnetId'`
+```
+- ALB作成
+```
+aws elbv2 create-load-balancer \
+--name ALB-ECS \
+--subnets ${SUBNETID1} ${SUBNETID2} \
+--security-groups ${SGID} \
+--scheme internet-facing \
+--type application \
+--ip-address-type ipv4
+```
+- リスナー作成 (HTTP)前の変数設定
+  - ターゲットグループは”ECABGA”を指定する
+```
+aws elbv2 create-listener \
+--load-balancer-arn $(aws elbv2 describe-load-balancers --query "LoadBalancers[].LoadBalancerArn" --output text --names ALB-ECS) \
+--protocol HTTP \
+--port 80 \
+--default-actions Type=forward,TargetGroupArn=$(aws elbv2 describe-target-groups --query "TargetGroups[].TargetGroupArn" --output text --name ECSBGA)
+```
 
+---
+## ECSクラスタ作成
+### IAMロール作成
+- ECSからECRにアクセスするためのロールを作成する
+- 内容は以下
+  - 信頼されたエンティティタイプ　:　AWS のサービス
+  - ユースケース　:　Elastic Container Service - Elastic Container Service Task
+  - 許可ポリシー  : AmazonECSTaskExecutionRolePolicy
+  - ロール名 :  ecsTaskExecutionRole
+
+### ECSクラスタの作成 （CLI）
+```
+aws ecs create-cluster --cluster-name nginx-cluster
+```
+
+### タスク定義作成
+- [task.json]ファイルを作成
+  - 作成はcloud9かcloud shellが望ましい
+  - [sed]コマンドを利用して、変数代入を行うため
+- 内容は以下 (※ 後でGitHUｂにアップロードする)
+```
+{
+    "family": "nginx-fargate", 
+    "networkMode": "awsvpc", 
+    "requiresCompatibilities": [ "FARGATE" ], 
+    "cpu": "256", 
+    "memory": "512",
+    "executionRoleArn": "arn:aws:iam::account-id:role/ecsTaskExecutionRole",
+    "containerDefinitions": [
+        {
+            "name": "nginx-fargate", 
+            "image": "account-id.dkr.ecr.ap-northeast-1.amazonaws.com/container-test:latest", 
+            "portMappings": [
+                {
+                    "containerPort": 80, 
+                    "hostPort": 80, 
+                    "protocol": "tcp"
+                }
+            ]
+        }
+    ]
+}
+```
+- ファイルのアカウントIDを利用しているIDに変換
+```
+ACCID=`aws sts get-caller-identity --query "Account" --output text`
+sed -e "s/account-id/${ACCID}/g" ~/environment/php-sample/task.json.org
+```
+- タスク登録
+```
+aws ecs register-task-definition --cli-input-json file://~/environment/php-sample/task.json
+```
