@@ -77,6 +77,25 @@ aws elbv2 create-listener \
 --default-actions Type=forward,TargetGroupArn=$(aws elbv2 describe-target-groups --query "TargetGroups[].TargetGroupArn" --output text --name ECSBGA)
 ```
 
+### ALBからECSに接続許可するセキュリティグループ作成 (CLI)
+- ALBからECSクラスタに接続するためにソースがALBからのセキュリティグループが必要なので作成する
+ - ”VPCID= ~ ”はハンズオンを行う、VPCIDが１つの場合利用、複数ある環境であれば予めVPCIDを確認しておくこと
+```
+VPCID=`aws ec2 describe-vpcs | jq -r '.Vpcs[].VpcId'`
+aws ec2 create-security-group --group-name SG-ECS --description "ALB to ECS" --vpc-id ${VPCID}
+aws ec2 describe-security-groups | jq -r '.SecurityGroups[] | [.GroupName, .GroupId] | @csv'
+```
+- 作成したグループにインバウンドルールを追加
+```
+SGID=`aws ec2 describe-security-groups --filters Name=group-name,Values=SG-ECS | jq -r ' .SecurityGroups[].GroupId'`
+ALBID=`aws ec2 describe-security-groups --filters Name=group-name,Values=SG-ALB | jq -r ' .SecurityGroups[].GroupId'`
+aws ec2 authorize-security-group-ingress --group-id ${SGID} --protocol tcp --port 80 --source-group ${ALBID}
+```
+- 確認
+```
+aws ec2 describe-security-groups --filters Name=group-name,Values=SG-ECS | jq -r '.SecurityGroups[].IpPermissions[] | [ .IpProtocol, .ToPort, .UserIdGroupPairs[].GroupId ] |  @csv'
+```
+
 ---
 ## ECSクラスタ作成
 ### IAMロール作成
@@ -94,7 +113,7 @@ aws ecs create-cluster --cluster-name nginx-cluster
 
 ### タスク定義作成
 - [task.json]ファイルを作成
-  - [こののファイル](https://github.com/YoichiSoma/sites/blob/main/docs/lab/lab2/2-2/task.json)の内容をコピーしてcloud9に貼り付ける
+  - [このファイル](https://github.com/YoichiSoma/sites/blob/main/docs/lab/lab2/2-2/task.json)の内容をコピーしてcloud9に貼り付ける
   - 作成はcloud9かcloud shellが望ましい
   - [sed]コマンドを利用して、変数代入を行うため
 - ファイルのアカウントIDを利用しているIDに変換 (CLI)
@@ -107,3 +126,27 @@ sed -i "s/account-id/${ACCID}/g" ~/environment/container-test/task.json
 aws ecs register-task-definition --cli-input-json file://~/environment/container-test/task.json
 ```
 
+### service 登録
+- [service.json]を作成する
+- [このファイル](https://github.com/YoichiSoma/sites/blob/main/docs/lab/lab2/2-2/service.json)の内容をコピーしてcloud9に貼り付ける
+- 各変数に値を設定 (CLI)
+```
+SGID=`aws ec2 describe-security-groups --filters Name=group-name,Values=SG-ECS-TEST --query "SecurityGroups[].GroupId" --output text`
+SUBNETID1=`aws ec2 describe-subnets --filters "Name=tag:Name,Values=base-aza" | jq -r '.Subnets[].SubnetId'`
+SUBNETID2=`aws ec2 describe-subnets --filters "Name=tag:Name,Values=base-azc" | jq -r '.Subnets[].SubnetId'`
+TGID=`aws elbv2 describe-target-groups --query "TargetGroups[].TargetGroupArn" --output text --name ECSTSBGA`
+
+sed -i "s/SGID/${SGID}/g" ~/environment/container-test/service.json
+sed -i "s/SUBNETID1/${SUBNETID1}/g" ~/environment/container-test/service.json
+sed -i "s/SUBNETID2/${SUBNETID2}/g" ~/environment/container-test/service.json
+sed -i "s/TGID/${TGID}/g" ~/environment/container-test/service.json
+
+aws ecs create-service --cli-input-json file://~/environment/container-test/service.json
+```
+### 確認
+- コンソールから クラスタ > 作成したクラスタ名 > サービス > 作成したサービス名 > ネットワーキングを表示し、DNS名をクリックしてコンテナの内容が表示されることを確認する
+- 以下コマンドでも確認可能 (CLI)
+```
+aws elbv2 describe-load-balancers --query "LoadBalancers[].DNSName" --output text
+curl ALB-ECS-1076678729.ap-northeast-1.elb.amazonaws.com
+```
