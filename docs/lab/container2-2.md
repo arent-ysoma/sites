@@ -139,10 +139,11 @@ TGID=`aws elbv2 describe-target-groups --query "TargetGroups[].TargetGroupArn" -
 sed -i "s/SGID/${SGID}/g" ~/environment/container-test/service.json
 sed -i "s/SUBNETID1/${SUBNETID1}/g" ~/environment/container-test/service.json
 sed -i "s/SUBNETID2/${SUBNETID2}/g" ~/environment/container-test/service.json
-sed -i "s/TGID/${TGID}/g" ~/environment/container-test/service.json
+※ ターゲットグループARNはスラッシュが入っているのでsedで置換できないため、viかcloud9のエディタで編集するm()m
 
 aws ecs create-service --cli-input-json file://~/environment/container-test/service.json
 ```
+
 ### 確認
 - コンソールから クラスタ > 作成したクラスタ名 > サービス > 作成したサービス名 > ネットワーキングを表示し、DNS名をクリックしてコンテナの内容が表示されることを確認する
 - 以下コマンドでも確認可能 (CLI)
