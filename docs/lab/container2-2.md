@@ -1,13 +1,13 @@
 # lab2-2 ECSクラスタ作成とBlue/Greenデプロイ
-[lab2-1](container2-1.md)でコンテナイメージの準備まで行った。    
-次にECSクラスタを作成し、作成したイメージをクラスタにデプロイするところまでやってみる。
-
+- [lab2-1](container2-1.md)でコンテナイメージの準備まで行った。    
+- 次にECSクラスタを作成し、作成したイメージをクラスタにデプロイするところまでやってみる。
+- 作業内容に "*** (CLI)"と記載があるものはcoud9のターミナルから作業を行う
 ---
 ## 前準備
 
 ---
 ## ALB作成
-### ALBに設定するセキュリティグループの作成
+### ALBに設定するセキュリティグループの作成 (CLI)
 - インターネットからHTTPとHTTPSを許可するグループを作成
   - ”VPCID= ~ ”はハンズオンを行うVPCIDが１つの場合利用、複数ある環境であれば予めVPCIDを確認しておくこと
 ```
@@ -27,7 +27,7 @@ aws ec2 describe-security-groups --filters Name=group-name,Values=SG-ALB | \
 jq -r '.SecurityGroups[].IpPermissions[] | [ .IpProtocol, .ToPort, .IpRanges[].CidrIp ] |  @csv'
 ```
 
-### ターゲットグループ作成
+### ターゲットグループ作成 (CLI)
 Blue/Green デプロイを行うため、２つ作成を行う
 - 変数代入
 ```
@@ -46,7 +46,7 @@ aws elbv2 create-target-group --name ECSBGB --protocol HTTP --port 80 --target-t
 aws elbv2 describe-target-groups
 ```
 
-### ALB作成
+### ALB作成 (CLI)
 - 事前変数作成
   - 利用するサブネットID、SG、の指定が必要なので変数化しておく
   - subnetIDは[Name]タグでフィルターしているので環境に応じてvaluesの値を変更する
@@ -97,12 +97,12 @@ aws ecs create-cluster --cluster-name nginx-cluster
   - [こののファイル](https://github.com/YoichiSoma/sites/blob/main/docs/lab/lab2/2-2/task.json)の内容をコピーしてcloud9に貼り付ける
   - 作成はcloud9かcloud shellが望ましい
   - [sed]コマンドを利用して、変数代入を行うため
-- ファイルのアカウントIDを利用しているIDに変換
+- ファイルのアカウントIDを利用しているIDに変換 (CLI)
 ```
 ACCID=`aws sts get-caller-identity --query "Account" --output text`
 sed -i "s/account-id/${ACCID}/g" ~/environment/container-test/task.json
 ```
-- タスク登録
+- タスク登録 (CLI)
 ```
 aws ecs register-task-definition --cli-input-json file://~/environment/container-test/task.json
 ```
