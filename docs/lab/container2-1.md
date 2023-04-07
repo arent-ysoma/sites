@@ -83,7 +83,8 @@ git push origin master
 ## CodeBuildで利用するIAM RoleにECRへのアクセスポリシーを付与
 - ポリシーの作成
    - ポリシー名： access_ECR_container-test （わかりやすい名前でOK）
-   - 内容 ： [このファイル]の内容をコピーして、アカウントIDを利用しているものに変更する、もしリポジトリ名を違うもので作成した場合はリポジトリ名も変更する
+   - 内容 ： [このファイル](https://github.com/YoichiSoma/sites/blob/main/docs/lab/lab2/access_ECR_container-test)の内容をコピーして、アカウントIDを利用しているものに変更する.
+     - もしリポジトリ名を違うもので作成した場合はリポジトリ名も変更する
 - [codebuild-nginx-test-service-role]ロールに作成したポリシーの割当を行う
 
 ## ビルドテスト
