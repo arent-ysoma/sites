@@ -13,3 +13,33 @@
 ## NW概要
 - AWSのネットワークを設計する際に必要な要素をまとめてみた   
    <img src="https://user-images.githubusercontent.com/125415634/231362383-a49f99ce-6754-4a93-a857-95d48e1ffd97.png" width="400px">
+
+## 要素説明
+- [リージョン(Region)](https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/using-regions-availability-zones.html)
+   - 地理的にはなれば場所
+   - 国内であれば”ap-northeast-1（東京）”でOK
+   - 大阪（ap-northeast-3）もあるが、よほどDR案件でなければ選択する必要はない
+      - ※ 大阪リージョンで使えない機能もあるので
+- アベイラビリティゾーン( Availability Zones)
+   - リージョン内の独立したデータセンタロケーション
+      - [ここ](https://dev.classmethod.jp/articles/server_2_resion/)にわかりやすい説明がある
+   - 大体は”AZ”（エーゼット）と約して説明することが多い
+   - 東京リージョンでは以下の３つが現在利用可能
+       - ap-northeast-1a
+       - ap-northeast-1c
+       - ap-northeast-1d
+   - ※昔はbがあったらしいが、現在はない
+   - アベイラビリティゾーンは以下のAWSコマンドでも調べることができる
+     ```
+     aws ec2 describe-availability-zones --region ap-northeast-1
+     ```
+- [VPC](https://docs.aws.amazon.com/ja_jp/vpc/latest/userguide/what-is-amazon-vpc.html)
+   - 仮想ネットワーク、オンプレミスの自社NWと考えるといいかも
+   - アカウントID内にいくつでも作成することは可能だがプロダクション環境で利用する場合はアカウント毎に分けたほうが望ましい
+   - VPCでCIDR ブロックを指定する
+   - 段階でオンプレミスや他クラウドと接続する予定がある場合を考慮し、ユーザにヒアリングをしておく
+   - 最小で/28ネットマスクで設計できるが小さすぎると将来的な拡張性や、ELBやRDS等拡張性のあるサービスに影響が出るため余裕を持った設計にすること
+     - 個人的には/16ぐらいだとこのあと説明するサブネットの設計がやりやすい
+   - [ここ](https://docs.aws.amazon.com/ja_jp/vpc/latest/userguide/vpc-cidr-blocks.html#add-cidr-block-restrictions)に詳しい説明がある
+
+   
