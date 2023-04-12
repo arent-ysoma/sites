@@ -56,5 +56,11 @@
       - ※厳密にはもう１つ（VPCのみのサブネット）あるがここは考慮する必要はない
    - 設定する場合にパブリックサブネットやプライベートサブネットという指定項目はない
    - サブネットも最小/28で指定はできるが特定のIPアドレスは利用できないため、小さくても/25ぐらいまでの大きさにしておくのが望ましい
+      - ELBやRDS等オートスケールで拡張するサービスを利用する場合は特に注意！
+      - IPアドレスは １〜３、255である  
       - [参考](https://docs.aws.amazon.com/ja_jp/vpc/latest/userguide/subnet-sizing.html)
    
+- [InternetGateway](https://docs.aws.amazon.com/ja_jp/vpc/latest/userguide/VPC_Internet_Gateway.html)
+   - VPC とインターネットとの間の通信を可能にする VPC コンポーネント
+   - これがないとVPCからインターネットに出ることができない
+   - 作成をしたら明示的にVPCにアタッチするのとこのあと説明するルートテーブルで指定する必要がある 
