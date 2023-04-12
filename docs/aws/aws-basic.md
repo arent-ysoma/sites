@@ -42,4 +42,19 @@
      - 個人的には/16ぐらいだとこのあと説明するサブネットの設計がやりやすい
    - [ここ](https://docs.aws.amazon.com/ja_jp/vpc/latest/userguide/vpc-cidr-blocks.html#add-cidr-block-restrictions)に詳しい説明がある
 
+- [Subnet](https://docs.aws.amazon.com/ja_jp/vpc/latest/userguide/configure-subnets.html)
+   - VPC内でネットワークを分けるためのIPアドレス範囲
+   - サブネットはAZをまたぐ設計はできないため、AZごとに指定が必要
+   - サブネットには２つの種類がある
+      -  PublicSubnet
+         - インターネットに直接出れるネットワーク
+         - インタネットに直接出る必要のあるec2やelb等を設置する場所     
+      -  PrivateSubnet 
+         - VPC内やオンプレミスや他クラウドのプライベートネットワークのみで通信するネットワーク
+         - DBサーバやキャッシュサーバ、バッチサーバ等を設置する場所
+         - NAT処理を行うサーバやNATゲートウェイを経由すればインターネットに出ることは可能である
+      - ※厳密にはもう１つ（VPCのみのサブネット）あるがここは考慮する必要はない
+   - 設定する場合にパブリックサブネットやプライベートサブネットという指定項目はない
+   - サブネットも最小/28で指定はできるが特定のIPアドレスは利用できないため、小さくても/25ぐらいまでの大きさにしておくのが望ましい
+      - [参考](https://docs.aws.amazon.com/ja_jp/vpc/latest/userguide/subnet-sizing.html)
    
