@@ -1,3 +1,7 @@
+- AWSアカウントのデフォルトで有効になっているリージョンのすべてのVPC（サブネット、IGW）を削除する
+- 下記の内容をAWS CLIが利用できる環境(CloudShell等）に貼り付ければ実行できる。
+- すでに削除されている場合はスキップしてくれる。
+```
 aws --output text ec2 describe-regions --query "Regions[].[RegionName]" \
 | while read region; do
   aws --region ${region} --output text \
@@ -35,3 +39,4 @@ aws --output text ec2 describe-regions --query "Regions[].[RegionName]" \
       ec2 delete-vpc --vpc-id ${vpc}  
   done
 done
+```
