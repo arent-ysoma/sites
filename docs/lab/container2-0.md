@@ -33,3 +33,10 @@
 - 他それぞれの設定項目において項番毎に適宜記載する
 
 ---
+
+## ハンズオン
+- [lab2-1 コードからコンテナイメージを作成](https://github.com/YoichiSoma/sites/blob/main/docs/lab/container2-1.md)
+- [lab2-2 ECSクラスタ作成](https://github.com/YoichiSoma/sites/blob/main/docs/lab/container2-2.md)
+- [lab2-3 Blue/Greenデプロイ環境の作成](https://github.com/YoichiSoma/sites/blob/main/docs/lab/container2-3.md)
+- [lab2-4 CI/CD環境の構築](https://github.com/YoichiSoma/sites/blob/main/docs/lab/container2-4.md)
+- [まとめ] ※これから作成
