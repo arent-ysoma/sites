@@ -187,11 +187,12 @@ terraform {
   }
 }
 
-
+```
 
 
 ---
 
+```
 resource "aws_s3_bucket_policy" "zzk-hon-allow-vpce" {
   bucket = aws_s3_bucket.dev-zzk-lp.id
   policy = data.aws_iam_policy_document.allow_access_from_another_account.json
@@ -238,7 +239,7 @@ data "aws_iam_policy_document" "policy_deny_all" {
         }
     ]
 }
-
+```
 
 #### VPCエンドポイントからのみS3操作を可能にするポリシー
 ```
