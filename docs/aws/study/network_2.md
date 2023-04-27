@@ -42,4 +42,7 @@
 - ただし、クロスリージョン(AZ-AからAZ-C)での通信はできない
 
 ### 参考
-- https://devlog.arksystems.co.jp/2018/05/11/4896/
+- AWS PrivateLinkの使い方と注意点 ～VPCピアリングとの使い分け～
+  - https://devlog.arksystems.co.jp/2018/05/11/4896/
+- PrivateLinkでサービスを提供している業者
+  - https://docs.confluent.io/ja-jp/cloud/current/networking/private-links/aws-privatelink.html#aws-privatelink
