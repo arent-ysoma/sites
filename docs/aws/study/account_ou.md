@@ -48,4 +48,11 @@ AWSとして複数アカウントを利用する場合はAWS Organizationsを利
   - https://docs.aws.amazon.com/ja_jp/general/latest/gr/Welcome.html
 - AWS Well-Architected Framework
   - https://docs.aws.amazon.com/ja_jp/wellarchitected/latest/framework/welcome.html
-  - 
+- AWSアカウント管理
+  - https://docs.aws.amazon.com/ja_jp/accounts/latest/reference/accounts-welcome.html 
+- IAM
+  - https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/introduction.html
+- IAM入門
+　- https://blog.serverworks.co.jp/tech/2020/02/03/awsaccountforbeginner/
+   
+ 
