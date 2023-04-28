@@ -32,7 +32,7 @@ terraform destory
   - 予め用意したコードを利用
   ```
   mv instance2.tf{.org,}
-   mv instance2.tf{.org,}
+  mv endpoint.tf{.org,}
   ```
   - 適用
   ```
@@ -57,4 +57,9 @@ ssh -i ~/lab-key.pem ec2-user@${LABSVIP}
 ```
 ssh -i ~/lab-key.pem ec2-user@172.30.21.101
 ```
+- LAB-SV2からS３バケットにアクセス
+```
+aws s3 ls
+```
+
 
