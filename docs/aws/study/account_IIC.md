@@ -6,3 +6,9 @@
 ---
 
 # [AWS IAM Identity Center](https://docs.aws.amazon.com/ja_jp/singlesignon/latest/userguide/what-is.html) とは？
+- 複数のAWSアカウントとアプリケーションへのSingle Sgin-Onアクセスの一元管理を行うサービスである。
+  - 認証情報を一元管理できる (AWS OUと連携して)
+  - 外部のIdPと連携できる (Active Drectory,Google WorkSpace等)
+  - 一時アクセスキーを簡単に発行できる
+     - ローカル環境はIaCを実行する場合に有効である
+
