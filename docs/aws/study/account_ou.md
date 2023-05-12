@@ -79,29 +79,6 @@ AWS Organizations（以下 AWS OU）を利用することにより以下のメ�
       - 管理アカウント以外のアカウント
       - 組織メンバーになることできるのは、１度に１つのみ
 
-----
-(以下、コピペ元データのためあとで整理する)
 
-
-## 権限（IAM ユーザ、ロール、ポリシー）
-- ポリシー
-  - リソースに対して許可や禁止、操作制限等を行う情報
-- ロール
-  - ポリシー
-
----
-## 参考
-- AWS全般のリファレンス
-  - https://docs.aws.amazon.com/ja_jp/general/latest/gr/Welcome.html
-- AWS Well-Architected Framework
-  - https://docs.aws.amazon.com/ja_jp/wellarchitected/latest/framework/welcome.html
-- AWSアカウント管理
-  - https://docs.aws.amazon.com/ja_jp/accounts/latest/reference/accounts-welcome.html 
-- IAM
-  - https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/introduction.html
-- AWS IIC
-  - https://docs.aws.amazon.com/ja_jp/singlesignon/latest/userguide/what-is.html
-- IAM入門
-　- https://blog.serverworks.co.jp/tech/2020/02/03/awsaccountforbeginner/
    
  
