@@ -5,6 +5,7 @@
    - ※ ただし、VPC内に構築したリソースやサービスはローカル通信になるため対象外である
    - イメージ
     - ![aws-basic-vpcとサービス](https://user-images.githubusercontent.com/125415634/234213181-c542de86-b139-49fe-a0c0-9bdd2acadce6.png)
+   - [参考:AWSリソース間をインターネット経由で通信したらどこ通るか見てみる](https://blog.serverworks.co.jp/aws-internet-traceroute)
 
 ## 何が問題か？
 - エンドユーザのガイドラインにてインターネットへの通信は禁止である
