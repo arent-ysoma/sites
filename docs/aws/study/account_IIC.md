@@ -1,7 +1,7 @@
 # AWS IAM Identity Center について
-[前項]ではAWS OUを利用することにより、請求先の一本化やAWSアカウントの一元管理ができることを説明した。   
+[前項](https://github.com/YoichiSoma/sites/blob/main/docs/aws/study/account_ou.md)ではAWS OUを利用することにより、請求先の一本化やAWSアカウントの一元管理ができることを説明した。   
 ただし、実際にユーザが利用するためには更にIAMアカウント管理が必要となる。  
-そこで"AWS IAM Identity Center(旧AWS SSO)"を利用することにより、まとめて管理できるのでそちらの説明を行う。
+そこで **"AWS IAM Identity Center(旧AWS SSO)"** を利用することにより、まとめて管理できるのでそちらの説明を行う。
 
 ---
 
@@ -13,9 +13,11 @@
      - ローカル環境はIaCを実行する場合に有効である
 
 ## どういう状況になるのか？
-前項で説明した通り、AWSアカウントをAWS OUを利用せず、個々に管理した場合、それぞれのAWSアカウント毎にIAMユーザの作成やロールの管理が必要となる。   
+前項で説明した通り、AWSアカウントをAWS OUを利用せず個々に管理した場合、それぞれのAWSアカウント毎にIAMユーザの作成やロールの管理が必要となる。   
 AWS IICを有効化することにより以下の状態となる。
 
 <img src="https://github.com/YoichiSoma/sites/assets/125415634/b148e99a-ce90-4bbe-a203-ab41257032ab" width="450">
 
 #### 図の説明
+- まず１つの管理アカウント(Management Account)と２つのメンバーアカウント(A,B)を含むOU（組織）が存在する
+- Management AccoutのAWSリソース内でIICを設定、ユーザ(user_A,B,C)、グループ(AとBが所属しているグループ)、権限セット(1,2)が作成されている
