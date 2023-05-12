@@ -39,3 +39,10 @@ AWS IICを有効化することにより以下の状態となる。
 ---
 ## まとめ
 AWS OUとAWS IICを組み合わせることにより、組織全体のコスト管理や権限の一括管理画が可能となり、運用コストやセキュリティ面での運用メリットが発揮される
+
+---
+### 参考
+- AWS SSOを活用して安全かつ効率的にAWSへアクセスする
+  - https://tech.nri-net.com/entry/recommend_aws_sso
+- AWS SSOを図解してみた
+  - https://dev.classmethod.jp/articles/aws-sso-wakewakame/
