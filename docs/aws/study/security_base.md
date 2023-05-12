@@ -6,6 +6,7 @@
   - マネジメントサービス系のセキュリティ
      - AWS WAF
      - AWS Network Firewall
+        - https://docs.aws.amazon.com/network-firewall/latest/developerguide/what-is-aws-network-firewall.html
   - RoleBaseの制御 (主にS3)
 
 ---
