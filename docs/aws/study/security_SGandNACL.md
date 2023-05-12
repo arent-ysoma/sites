@@ -23,7 +23,7 @@ ec2インスタンスや一部マネジメントサービスへのネットワ�
 <img src="https://github.com/YoichiSoma/sites/assets/125415634/d41c71d8-e923-47d5-93c1-3f2a9de38fc7" width="500">
 
 ----
-## SGの使い方
+## SGの使い方([参考](https://docs.aws.amazon.com/ja_jp/vpc/latest/userguide/security-group-rules.html#security-group-referencing))
 SGの基本は以下である
 
 | インバウンド or アウトバウンド | IPバージョン(v4 or v6) | タイプ | プロトコル | ポート範囲 | ソース |
@@ -38,7 +38,14 @@ SGの基本は以下である
 - プレフィクスリストID
    - マネージドプレフィックスリストのIDで指定する
    - ”マネージドプレフィックスリスト”とはCIDRブロックのセットであり、例えばS3のCIDRブロックであったり、自前のIPアドレスをまとめたリストでもある
-  
+- セキュリティグループID
+   - 例えばECSのサービスをELBで指定する場合、サービスのIPアドレスはデプロイするごとに変わるためセキュリティグループIDを指定する
+
+
+## NACLについて([参考](https://docs.aws.amazon.com/ja_jp/vpc/latest/userguide/vpc-network-acls.html))
+- NACLについてはよほど厳しいセキュリティ要件がない限り未設定でも問題ない
+- ただし、VPCをまたいだ通信がある場合は明示的に設定することもある
+
 
 
 
