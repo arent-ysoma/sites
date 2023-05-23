@@ -5,14 +5,15 @@
 - [参考](https://dev.classmethod.jp/articles/aws-cli-for-iam-identity-center-sso/)
 - cloudshellでやってみる
 
-### 設定
+---
+## 設定
 例として、awsアカウントA(ACC-A)とawsアカウントB(ACC-B)でSSOアカウントを利用しているとする。  
 ACC-BアカウントでACC-AのAWSリソースを操作したい場合の設定となる。
 
 - [aws configure sso]コマンドを実施し、適宜値を入力していく
 ```
 [cloudshell-user@ip-10-2-14-146 ~]$ aws configure sso
-SSO session name (Recommended): ACC-A # <- セッション名なので何かわかりやすいものを指定する
+SSO session name (Recommended): acc-sso # <- セッション名なので何かわかりやすいものを指定する
 SSO start URL [None]: https://d-xxxxxxxxxx.awsapps.com/start # <- ログインURLを指定する
 SSO region [None]: ap-northeast-1 # <- もしSSOを利用しているRegionが東京リージョン以外であれば明示的に指定したほうがいいかも
 SSO registration scopes [sso:account:access]: # <- ここは空のままでOK
@@ -52,9 +53,62 @@ aws s3 ls --profile acc-a
 ```
 - 適当なAWSコマンドを実施してみる
 ```
-aws s3 ls --profile acc-a
+$ aws s3 ls --profile acc-a
 ```
    - 実施した内容がacc-aに設定されているリソースが表示されればOK
+
+----
+## 再度認証をする場合
+aws iicではセッション期間が指定されている(デフォルトは8時間)   
+そのため期限が切れた場合は再認証を行う
+
+- [aws sso login]コマンドで認証を行える
+```
+$ aws sso login --profile acc-a
+```
+- 実行すると認証用URLとコードが表示されるのでWEB画面で認証を行う
+
+---
+## アカウントを追加したい場合
+- ACC-AとACC-B、更にACC-C(333333333333)のアカウントが存在しておりそちらもACC-Bのユーザアカウントで操作したい場合は[.aws/config]を編集すれば良い
+- 内容的には以下の様な感じとなる
+```
+$ vi .aws/config
+[profile acc-a]
+sso_session = acc-sso
+sso_account_id = 111111111111
+sso_role_name = AdministratorAccess
+region = ap-northeast-1
+[sso-session acc_sso]
+sso_start_url = https://d-xxxxxxxxxx.awsapps.com/start
+sso_region = ap-northeast-1
+sso_registration_scopes = sso:account:access
+## ここから下を追加する
+[profile acc-c]
+sso_session = acc-sso
+sso_account_id = 333333333333
+sso_role_name = AdministratorAccess
+region = ap-northeast-1
+```
+
+---
+## CodeCommitで利用したい
+- コードを管理しているAWSアカウントがACC-AでありACC-Bでそのコードを利用したいときどうするか。
+- [参考](https://dev.classmethod.jp/articles/grc-codecomit-add-remoterepo/)
+- [参考2](https://docs.aws.amazon.com/ja_jp/codecommit/latest/userguide/setting-up-git-remote-codecommit.html)
+- 設定や操作内容はcloudshellで操作する場合の話となる
+
+### 設定
+- GRC(git-remote-codecommit)をインストール
+```
+pip3 install git-remote-codecommit
+```
+- ACC-Aのhogeリポジトリの内容をcloneしたい場合は以下のコマンドでcloneできる
+```
+git clone codecommit::ap-northeast-1://<プロファイル名>@hoge
+```
+- [リポジトリ/.git/config]のファイルを見てもらうとわかるがoriginのURLがGRCとなっている
+
 
 
 
