@@ -47,8 +47,14 @@ AWSでインスタンスを稼働する場合、いくつかの料金プラン�
   - RI(スタンダート) 3年前払い : 0.020 USD (62% OFF ) 前払いして 538 USD
 - RIにはいくつかプランが有るため次項にて説明する
 
-## Savings Plans (セービングプラン)
-- （ここから書く）
+## Savings Plans (セービングプラン、以下SP)
+- リソースに対してではなく、利用する時間に対してコミットすることでディスカウントされるプラン
+- 適用されるリソース以下
+   - ec2インスタンス
+   - Fargate
+   - Lambda
+   - Sagemaker
+- プランタイプはいくつかあるが今回の話ではec2をターゲットにしているので２つのプランの説明を次項で行う
 
 
 ---
@@ -88,4 +94,37 @@ AWSでインスタンスを稼働する場合、いくつかの料金プラン�
 
 ---
 ### Savings Plansの種類([参考](https://docs.aws.amazon.com/ja_jp/savingsplans/latest/userguide/what-is-savings-plans.html))
+Saving Planは以下の3つがある
+- Compute Savings Plan
+  - 適用は前項で説明した通りec2,Fargate,Lambdaに適用される
+  - インスタンスファミリーの変更や、リージョンを変更、OSを変えても適用され続ける
+  - 割引率は最大66%
 
+- EC2 Instance Savings Plans
+  - 名前の通りec2に特化した割引プラン
+  - インスタンスファミリー(東京のm5など)のコミットは必要
+  - ファミリーサイズ、OS、テナンシーを変更しても適用され続ける
+
+- SageMaker Savings Plans
+   - これはSageMakerで利用するインスタンスファミリーに特化しているので説明は割愛
+
+---
+## 各割引プランの比較
+[Savings Plans とは?](https://docs.aws.amazon.com/ja_jp/savingsplans/latest/userguide/what-is-savings-plans.html) ページの内容を再掲
+
+|内容|Compute Savings Plans|EC2 Instance Savings Plans|コンバーチブル RI|スタンダード RI|
+|---|---|---|---|---|
+|オンデマンドに比べ節約|最大66%|最大72%|最大66%|最大72%|
+|金銭的コミットメントと引き換えに価格を下げる|✓|✓|-|-|
+|すべてのインスタンスファミリーに自動的に価格を適用|✓|-|-|-|
+|任意のインスタンスサイズに自動的に価格を適用|✓|✓|-※|-※|
+|すべてのテナンシーまたはOSに自動的に価格を適用|✓|✓|-|-|
+|Fargate を使用して Amazon ECS と Amazon EKS に自動的に適用|✓|-|-|-|
+|Lambda に自動的に適用されます|✓|-|-|-|
+|AWS地域全体に価格を自動的に適用|✓|-|-|-|
+|1年または3年の期間オプション|✓|✓|✓|✓|
+- ※ リージョナルコンバーチブル RI とリージョンスタンダード RI では、インスタンスサイズを柔軟に設定できる。
+
+---
+# 結局どれを選べば？
+- (これから書く)
