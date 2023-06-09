@@ -12,7 +12,7 @@ AWSの各サービスを操作するにはAWSコンソール、AWS CLI、AWS SDK
 - 接続はユーザ名、パスワードないしPrivateキーでの接続となる
 
 ## セッションマネージャを利用しての接続
-- AWS Systems Mangerというサービスがあり、リソースを運用管理するものである(他にも色々)
+- [AWS Systems Manger](https://docs.aws.amazon.com/ja_jp/systems-manager/latest/userguide/what-is-systems-manager.html)というサービスがあり、リソースを運用管理するものである(他にも色々)
 - Systems Mangerのノード管理機能である"Session manger"および”Fleet Manger”を利用することによりEC2上で稼働しているOSにログインすることができる
 - RDSへの接続はSessin Manger経由でポートフォワーディングを行うことにより接続が実現できる
 
