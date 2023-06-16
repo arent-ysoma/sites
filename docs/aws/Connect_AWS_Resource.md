@@ -11,6 +11,24 @@ AWSの各サービスを操作するにはAWSコンソール、AWS CLI、AWS SDK
 - 直接接続の場合はSGにて接続元制限を行う必要がある
 - 接続はユーザ名、パスワードないしPrivateキーでの接続となる
 
+## EC2 Instance Connect
+- これはマネジメントコンソールからSSHでEC2インスタンスに接続する方法
+  - キーペアは1回限りの公開鍵が生成されるので鍵指定の必要はない
+  - 接続方法は２つのパターンがある
+
+#### パターン１：EC2 Instance Connect エンドポイントを使用して接続する
+<img src="https://github.com/YoichiSoma/sites/assets/125415634/35fb3062-b40c-4a36-a1bb-5f64c61c1398" width="300">
+
+- 最近発表されたパターンでエンドポイントから接続ができる([参考](https://aws.amazon.com/jp/about-aws/whats-new/2023/06/amazon-ec2-instance-connect-ssh-rdp-public-ip-address/))
+  - エンドポイントはサブネット内にENIが作成されるのでローカル通信だけ許可すれば接続できる
+  - エンドポイント作成で"EC2 Instance Connect Endpoint"を指定し、VPC、セキュリティーグループ、サブネットを指定すれば作成ができる
+- EC2側でもSGでエンドポイントからの接続許可は必要
+
+### パターン２：EC2 Instance Connect を使用して接続する
+(画像なし)
+- 従来の接続方法
+- パターン１と同じSSHだが、利用リージョンのIPアドレスレンジをSGで許可する必要あり（結構広いかも）
+
 ## セッションマネージャを利用しての接続
 - [AWS Systems Manger](https://docs.aws.amazon.com/ja_jp/systems-manager/latest/userguide/what-is-systems-manager.html)というサービスがあり、リソースを運用管理するものである(他にも色々)
 - Systems Mangerのノード管理機能である"Session manger"および”Fleet Manger”を利用することによりEC2上で稼働しているOSにログインすることができる
@@ -36,12 +54,7 @@ AWSの各サービスを操作するにはAWSコンソール、AWS CLI、AWS SDK
 - そのため別途フォワード用インスタンスが必要となる
 
 ## その他
-#### EC2 Instance Connect
-- これはマネジメントコンソールからSSHでEC2インスタンスに接続する方法
-- ただし、キーペアを設定したEC2には接続不可
-  - この時点であまり用途が無い気がするが・・・・
- 
-#### EC2 シリアルコンソール ([参考](https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/ec2-serial-console.html))
+### EC2 シリアルコンソール ([参考](https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/ec2-serial-console.html))
 - マネジメントコンソール or CLIの場合[ec2-instance-connect]コマンドのオプションで接続できる
 - 以下のインスタンスタイプ以外は利用できないので注意
    - Nitro システム上に構築されたすべての仮想化インスタンス
