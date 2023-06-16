@@ -25,9 +25,11 @@ AWSの各サービスを操作するにはAWSコンソール、AWS CLI、AWS SDK
 - EC2側でもSGでエンドポイントからの接続許可は必要
 
 ### パターン２：EC2 Instance Connect を使用して接続する
-(画像なし)
+<img src="https://github.com/YoichiSoma/sites/assets/125415634/c39347f5-72cf-4616-80fa-1828ddff2188" width="300">
+
 - 従来の接続方法
-- パターン１と同じSSHだが、利用リージョンのIPアドレスレンジをSGで許可する必要あり（結構広いかも）
+- パターン１と同じSSHだが、APIからの接続となりパブリックIPの許可が必要
+- 利用リージョンのIPアドレスレンジをSGで許可する必要あり（結構広いかも）
 
 ## セッションマネージャを利用しての接続
 - [AWS Systems Manger](https://docs.aws.amazon.com/ja_jp/systems-manager/latest/userguide/what-is-systems-manager.html)というサービスがあり、リソースを運用管理するものである(他にも色々)
@@ -53,11 +55,15 @@ AWSの各サービスを操作するにはAWSコンソール、AWS CLI、AWS SDK
 - Session Mangerで接続したインスタンスからポートフォワードで接続
 - そのため別途フォワード用インスタンスが必要となる
 
-## その他
-### EC2 シリアルコンソール ([参考](https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/ec2-serial-console.html))
+## EC2 シリアルコンソール ([参考](https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/ec2-serial-console.html))
 - マネジメントコンソール or CLIの場合[ec2-instance-connect]コマンドのオプションで接続できる
 - 以下のインスタンスタイプ以外は利用できないので注意
    - Nitro システム上に構築されたすべての仮想化インスタンス
      - ***※ 無料枠であるt2系は上記に該当しないので利用できない***
    - その他特定のインスタンス 
 - SSHでどうしても入れないときには有用だが、あまり使うことはない
+
+---
+# どの接続が良いのか？
+- 少し前はセッションマネージャでの接続がセキュア面では良かったが、EC2 Instance Connect エンドポイントのほうが手軽さが上でありこちらの接続がおすすめである
+- ただしエンドポイントの利用料金は無料であるが作成できる数に制限があるかもしれないので注意が必要である
