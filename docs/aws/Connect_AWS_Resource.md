@@ -66,4 +66,7 @@ AWSの各サービスを操作するにはAWSコンソール、AWS CLI、AWS SDK
 ---
 # どの接続が良いのか？
 - 少し前はセッションマネージャでの接続がセキュア面では良かったが、EC2 Instance Connect エンドポイントのほうが手軽さが上でありこちらの接続がおすすめである
-- ただしエンドポイントの利用料金は無料であるが作成できる数に制限があるかもしれないので注意が必要である
+- ただしエンドポイントの利用料金は無料であるが作成できる数に制限があるので注意が必要である
+- [[参考]C2 Instance Connect Endpoint と Session Managerの違いをまとめてみた](https://dev.classmethod.jp/articles/compare-eic-endpoint-and-session-manager/)
+
+
