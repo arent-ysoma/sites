@@ -24,7 +24,7 @@ AWSの各サービスを操作するにはAWSコンソール、AWS CLI、AWS SDK
   - エンドポイント作成で"EC2 Instance Connect Endpoint"を指定し、VPC、セキュリティーグループ、サブネットを指定すれば作成ができる
 - EC2側でもSGでエンドポイントからの接続許可は必要
 
-### パターン２：EC2 Instance Connect を使用して接続する
+#### パターン２：EC2 Instance Connect を使用して接続する
 <img src="https://github.com/YoichiSoma/sites/assets/125415634/c39347f5-72cf-4616-80fa-1828ddff2188" width="300">
 
 - 従来の接続方法
