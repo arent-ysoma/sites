@@ -16,20 +16,26 @@ AWSの各サービスを操作するにはAWSコンソール、AWS CLI、AWS SDK
   - キーペアは1回限りの公開鍵が生成されるので鍵指定の必要はない
   - 接続方法は２つのパターンがある
 
-#### パターン１：EC2 Instance Connect エンドポイントを使用して接続する
+#### パターン1-1：EC2 Instance Connect エンドポイントを使用して接続する (Linux系)
 <img src="https://github.com/YoichiSoma/sites/assets/125415634/35fb3062-b40c-4a36-a1bb-5f64c61c1398" width="300">
 
 - 最近発表されたパターンでエンドポイントから接続ができる([参考](https://aws.amazon.com/jp/about-aws/whats-new/2023/06/amazon-ec2-instance-connect-ssh-rdp-public-ip-address/))
   - エンドポイントはサブネット内にENIが作成されるのでローカル通信だけ許可すれば接続できる
   - エンドポイント作成で"EC2 Instance Connect Endpoint"を指定し、VPC、セキュリティーグループ、サブネットを指定すれば作成ができる
 - EC2側でもSGでエンドポイントからの接続許可は必要
+#### パターン1-2：EC2 Instance Connect エンドポイントを使用して接続する (Windows)
+<img src="https://github.com/YoichiSoma/sites/assets/125415634/e59c0d70-b611-4ac7-b00b-2664c08cfa30" width="300">
+- パターン1-1と同様だが、RDP接続を行う場合利用端末とエンドポイント間でWebSocketトンネルを張ってからRDPで接続する必要がある
+- [参考:EC2 Instance Connect Endpoint経由でWindows ServerにRDP接続してみた](https://dev.classmethod.jp/articles/how-to-connect-windows-server-instance-via-eic-endpoint/)
 
-#### パターン２：EC2 Instance Connect を使用して接続する
+#### パターン2：EC2 Instance Connect を使用して接続する
 <img src="https://github.com/YoichiSoma/sites/assets/125415634/c39347f5-72cf-4616-80fa-1828ddff2188" width="300">
 
 - 従来の接続方法
-- パターン１と同じSSHだが、APIからの接続となりパブリックIPの許可が必要
+- パターン1-1と同じSSHだが、APIからの接続となりパブリックIPの許可が必要
 - 利用リージョンのIPアドレスレンジをSGで許可する必要あり（結構広いかも）
+- Windowsの場合はAWSコンソールでメニューがない
+  - パターン1-2と同様の手順で接続はできる
 
 ## セッションマネージャを利用しての接続
 - [AWS Systems Manger](https://docs.aws.amazon.com/ja_jp/systems-manager/latest/userguide/what-is-systems-manager.html)というサービスがあり、リソースを運用管理するものである(他にも色々)
@@ -46,10 +52,11 @@ AWSの各サービスを操作するにはAWSコンソール、AWS CLI、AWS SDK
     - EC2インスタンス用のIAMロールを作成する
     - EC2インスタンスに作成したIAMロールをアタッチする 
 
-#### RDPの場合 (後で試す)
+#### RDPの場合
 - RDPの場合はSystems ManagerのFleet Managerを利用すると接続できる
 - 経路はSession Mangerと変わらないため割愛
 - これを利用することにより、AWSコンソール画面からWindowsマシンへ接続することが可能である
+  - 予め設定したキーペアを利用するかキーペアからパスワードを生成して接続する必要がある
 
 #### RDSへの接続 (後で試す)
 - Session Mangerで接続したインスタンスからポートフォワードで接続
