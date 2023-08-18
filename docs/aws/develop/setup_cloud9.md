@@ -1,10 +1,12 @@
 # cloud9で開発環境を用意する
-## 主旨
+## ■ 主旨
 - cloud9でboto3(AWS SDK for Python)を利用したい
 - boto3のバージョンによってはPythonの新しいものを利用する必要がある
 - そのための準備
 
-## pyenvの導入
+---
+
+## ■ pyenvの導入
 - pytenvとは同じ環境に複数のpythonバージョンを利用できるようにするものである
 - cloud9のPythonはデフォルトで3.7.X ぽいので環境を変更せずに上位バージョンを利用できるようにする
 
@@ -34,7 +36,7 @@
   $ pyenv versions
   * system (set by /home/ec2-user/.pyenv/version)
   ```
-## Python 3.11のインストール
+## ■ Python 3.11のインストール
 
 今回はLambda関数を事前にcloud9でテストしたいので、最新のサポート対象であるPython3.11をインストールする
 
@@ -71,7 +73,9 @@
   $ pip install --upgrade pip
   ```
 
-## AWS CLIのアップデート
+---
+
+## ■ AWS CLIのアップデート
 
 今回は特に不要だが、環境を最新にしておくためやっておく
 
@@ -95,4 +99,12 @@
   source ~/.bashrc
   $ aws --version
   aws-cli/2.13.10 Python/3.11.4 Linux/4.14.309-231.529.amzn2.x86_64 exe/x86_64.amzn.2 prompt/off
+  ```
+## Boto3のインストール
+
+最新のpython環境にboto3が入っていないのでインストールを行う
+
+- インストール
+  ```
+  $ pip install boto3
   ```
