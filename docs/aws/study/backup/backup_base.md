@@ -119,5 +119,65 @@
   - ミドルウェア毎の手順となるため、学習コストや運用コストを考慮する必要がある
 
 ---
+## AWSで利用できるバックアップ手法
+### [EBSスナップショット](https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/EBSSnapshots.html)
+- EC2にマウントしているEBSボリュームをバックアップする手法
+  - 取得時点の状態で保存される
+- 最初のスナップショットはフルスナップショットになるため、保存元と同じ容量が消費される
+  - 以降は増えた分のみ消費される
+- 保存先はS3だがAWS管理のため保存先のデータは参照できない
+- 基本手動取得である
+  - 自動取得する場合は以下のサービスを利用する
+    - AWS Backup
+    - Amazon Data Lifecycle Manager
+- EC2インスタンスを削除してもスナップショットは削除されないのでこの点は注意が必要である
 
+### [AMIイメージ作成](https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/AMIs.html)
+- 稼働しているシステム全体をイメージ化する手法
+-   取得時点の状態で保存される
+-   まるっとイメージ化されるのでバックアップ用途というより、同じシステムを展開するときによく使われる
+-   EBSスナップショット同様手動で取得する必要がある
+-   差分保存ではないので、作成した分だけ容量が増える
+-   基本停止して作成となる
+    - 停止しなくても取得できるがAWSとしては非推奨である
 
+### RDS
+- RDSは設定を入れることによりスナップショットを作成できる
+  - https://docs.aws.amazon.com/ja_jp/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html
+
+### S3
+- バージョニング機能が存在するのでそちらでバックアップを行う
+  - https://docs.aws.amazon.com/ja_jp/AmazonS3/latest/userguide/Versioning.html
+
+### EFS
+- 自動バックアップ機能が実装されている
+  - AWS Backupを利用？
+- レプリケーションやDataSyncでの実装も可能
+- 参考
+  - https://dev.classmethod.jp/articles/how-to-choose-amazon-efs-backup-solution/
+
+### FSX for Windows
+- EFS同様機能として実装されている
+  - https://docs.aws.amazon.com/ja_jp/fsx/latest/WindowsGuide/using-backups.html
+- Windowsの機能であるシャドウコピー機能でも実現できる
+  - https://docs.aws.amazon.com/ja_jp/fsx/latest/WindowsGuide/manage-shadow-cpy.html
+
+### [AWS Backup](https://docs.aws.amazon.com/ja_jp/aws-backup/latest/devguide/whatisbackup.html)
+- AWS上の様々なリソースを統合的にバックアップできるサービス
+  - ec2,s3,ebs,rds,FSx等
+- リソースに対して一元管理や取得自動化ができるので複数のサービスをまとめて運用している場合は有用である
+- バック・アップコンプライアンスの向上
+  - 保持期間を設定
+  - ライフサイクルを設定して自動削除することができる
+
+---
+## まとめ
+
+AWSとしてのバックアップ手法はさほど多くないがVM観点のバックアップ、マネージド・サービス観点でのバックアップと基本は網羅されている<br>
+AWSの機能としてどんなバックアップがあるかを考える前に何をバックアップすべきなのか、バックアップ時間や復旧時間、予算に合わせてまずはシステムやサービス観点での検討が必要である<br>
+
+---
+
+## 参考
+- [CDP:Snapshotパターン](https://aws.clouddesignpattern.org/index.php/CDP_Snapshot%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3.html)
+  - これはクラウドデザインパターン的にどのようにバックアップを取得するとよいという例である
