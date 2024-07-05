@@ -83,3 +83,12 @@
     - 前項で作成したSGを指定
 
 ----
+## 番外編 Cloudshellから接続する
+これはインターネットからSSH接続するのとおなじ
+本当に急な場合だけ
+### やり方
+1. CloudshellのGIPを調べる
+   ```
+   $ curl http://checkip.amazonaws.com/
+   ```
+2. 調べたGIPをSGで許可する
