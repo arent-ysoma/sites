@@ -45,6 +45,41 @@
 - [3.112.23.0/29]はAWS各サービス向けに発行されたパブリックIPレンジである
 - もし接続できなくなった場合は以下で検索可能である
 - ```
-curl -s https://ip-ranges.amazonaws.com/ip-ranges.json | \
+   curl -s https://ip-ranges.amazonaws.com/ip-ranges.json | \
    jq '.prefixes[] | select(.region == "ap-northeast-1" and .service == "EC2_INSTANCE_CONNECT")'
-```
+  ```
+
+---
+## EC2 Instance Connect エンドポイントを使ってみる
+- [参考1](https://dev.classmethod.jp/articles/ec2-instance-connect-endpoint-private-access/)
+- [参考2](https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/connect-with-ec2-instance-connect-endpoint.html)
+
+### EC2 Instance Connect エンドポイントとは？
+- awsコンソールやAWS CLIから踏み台を経由せず、安全にインスタンスへ接続できる
+- 通信は内部通信となるため、インスタンスへのパブリックIP割り当てが不要となる
+- エンドポイントではあるが利用料が発生しない
+- ただしVPCあたり１つしか作成できないので作成場所には注意が必要
+
+### 設定
+#### 事前準備
+- エンドポイントに設定するSGを作成する
+  - インバウンド
+    - タイプ: SSH
+    - ソース: EC2が所属しているSG
+- EC2接続許可しているSGに上記SGを追加する
+  - インバウンド
+    - タイプ: SSH
+    - ソース: 前項で作成したSG
+#### エンドポイント作成
+- VPC > エンドポイント > エンドポイントを作成
+- 「エンドポイントを作成」画面で以下の通り設定し、[エンドポイントを作成]ボタンをクリックする
+  - 名前タグ
+    - epi-EC2-Instance-Con ※わかりやすい名前であればなんでもOK
+  - サービスカテゴリ
+    - "EC2 インスタンス接続エンドポイント"にチェック
+  - VPC
+    - 利用しているVPCを選択
+  - SG
+    - 前項で作成したSGを指定
+
+----
