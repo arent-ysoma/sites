@@ -27,3 +27,30 @@
   - HHKのUS配列で利用するためのスクリプト
   - vimカーソル移動
 
+---
+# 追加設定
+## AltキーにIME変換機能を割り当てる
+日本語キーボード場合はスペースキーの左に無変換キー、右に変換キーの割当がある   
+英語キーボードの場合IME切り替えのキーがない  
+そのため標準のUSキーボードにはスペースキーの両脇にALTキーがあるのでこれをIME切り替えに利用する
+
+## CapsキーをCtrlキーに変更する
+**これはAUとHotKeyで実現できるので割当しない**   
+HHKBの場合は左小指辺りにctrlキーが配置されるのでvim操作がやりやすいが、日本語配列の場合は同じ位置がcapsキーとなっている   
+そのためカーソル移動がやりづらくなるので入れ替えを行う   
+端末によってはBIOS設定等でハードウェア的に入れ替えることも可能であるが、払い出しマシンのBIOS設定はたいていいじれないので   
+
+## 変更方法
+- [Microsoft PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/)をインストール
+- PowerToysの管理画面を開き、Keyboard Managerを選択
+- 「Keyboard Manager」画面で以下の設定を行う
+  - Keyboard Managerを有効化する
+    - オン
+- キーの再マップ項目を開き、以下の設定をいれる
+  -  ![PowerToys KeyboardManagerEditor_NQqcwi66JP](https://github.com/user-attachments/assets/47a937b5-c811-47cf-9f7c-4a1c7e1303f4)
+  -  Alt(Left)
+      - 送信 :キーショットカットの送信
+      - IME Non-Convert
+  - Alt(Right)
+     - 送信 :キーショットカットの送信
+     - IME Non-Convert
