@@ -8,6 +8,7 @@ sudo yum install -y yum-utils
 sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
 sudo yum -y install terraform
 ```
+   - うまくいかない場合は[公式ドキュメント](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli#install-terraform)を参照
 - パスを通す (cloud-shell限定)
 ```
 sudo mkdir /home/app
