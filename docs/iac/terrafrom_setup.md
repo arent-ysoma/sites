@@ -2,7 +2,7 @@
 
 ## setup
 ### terraform インストール (CLI)
-- [インストール](sudo yum -y install terraform)
+- [インストール](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli#install-terraform)
 ```
 sudo yum install -y yum-utils
 sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
